@@ -1,4 +1,4 @@
-.PHONY: test run cleanup
+.PHONY: test run deploy deploy-local undeploy cleanup
 .ONESHELL:
 
 guard-%:
@@ -13,13 +13,13 @@ ccgreen=$(shell tput setaf 2)
 ccso=$(shell tput smso)
 
 
-test:
+test-health:
 	# make test
-	# @ source setup.sh ; health
+	@ source deploy.sh ; health
 
 run: guard-module
 	# make run
-	# @ source setup.sh ; runLocally $(module)
+	# @ source deploy.sh ; runLocally $(module)
 
 deploy:
 	# make deploy
