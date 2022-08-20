@@ -1,7 +1,9 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
+from authentication.core.config import DATABASE_URL
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"  # 1
+
+SQLALCHEMY_DATABASE_URI = DATABASE_URL  # 1
 
 
 engine = create_engine(  # 2

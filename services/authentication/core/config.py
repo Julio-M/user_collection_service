@@ -24,10 +24,16 @@ try:
     json_handler.setFormatter(formatter)
     logger.addHandler(json_handler)
 
-    API_V1_STR = "/api/v1/auth"
-    LOGIN_ENDPOINT = "login"
+    API_V1_STR = "/api/v1"
+    ENDPOINT = "test"
     PROJECT_NAME = "HomeApp"
-    TZ = ""
+    TZ = "America/New_York"
+
+    #Env variables
+
+    DATABASE_URL = os.environ.get('DB_URI')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 except Exception as e:
     print(e)

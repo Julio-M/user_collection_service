@@ -101,7 +101,7 @@ function activateEnv() {
       pip install -U pip &&
       echo "Using $(which python)" &&
       pip install -r "${moduleBasePath}"/requirements.txt &&
-      pip install uvicorn==0.12.2
+      pip install uvicorn==0.17.6
 
   else
     echo "${ccso}--> Requested venv ${VENV_DIR} doesn't exist.${ccend}"
@@ -136,9 +136,9 @@ function test(){
   fi
 
   moduleName=$1
-  export DB_URI="postgresql://developer:developer@localhost:5432/test_db_utils?connect_timeout=10"
-  #export DB_URI="sqlite:///test_db_utils.db"
-  export AUTH_SECRET="secret"
+  # export DB_URI="postgresql://developer:developer@localhost:5432/test_db_utils?connect_timeout=10"
+  export DB_URI="sqlite:///database.db"
+  export SECRET_KEY="3b7909e3c9914ad1724bacc506ddfa2419516721f13c8e2dfb7c3c447b442008"
   export PYTHONPATH=$(realpath ./services/${moduleName})
   activateEnv "${moduleName}" &&
   pytest -rf -v -p no:warnings \
@@ -149,10 +149,10 @@ function test(){
 
 function runLocally() {
   # Variables needed for executing apps locally
-  export DB_URI="postgresql://developer:developer@localhost:5432/sb?connect_timeout=10"
+  export DB_URI="sqlite:///database.db"
+  export SECRET_KEY="3b7909e3c9914ad1724bacc506ddfa2419516721f13c8e2dfb7c3c447b442008"
   export PYTHONPATH="$(pwd)/services/${moduleName}"
   export ES_HOST_NAME="localhost"
-  export AUTH_SECRET="secret"
 
   N=1
   if [ "$#" -ne ${N} ]; then
@@ -182,17 +182,35 @@ function runLocally() {
 function cleanup() {
   # shellcheck disable=SC2012
   rm -rf services/__pycache__
+  rm -rf services/alembic/__pycache__
+  rm -rf services/alembic/versions/__pycache__
+  # rm -rf services/alembic/versions/*.py
   # shellcheck disable=SC2012
   for file in $(ls -d services/*/ | cut -f2 -d'/') ; do
     echo "Deleting ${file}"
     deleteEnv "${file}" || true
   done
-  undeploy
+  # undeploy
   rm -rf .aws-sam || true
-  rm -rf .python-version || true
+  # rm -rf .python-version || true
+  find . -name "*.db" -delete
 }
 
+function makeMigrations() {
+  N=1
+  if [ "$#" -ne ${N} ]; then
+    echo "makeMigrations needs ${N} parameter(s)"
+    exit 1
+  fi
+  cd ./services/
+  migrationName=$1
+  alembic revision --autogenerate -m "${migrationName}"
+}
 
+function migrate(){
+  cd ./services/
+  alembic upgrade head      
+}
 # function deploy() {
 #   sam validate -t ${TEMPLATE_FILE_NAME}
 #   sam build --template-file=${TEMPLATE_FILE_NAME} --use-container

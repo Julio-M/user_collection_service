@@ -9,7 +9,7 @@ from authentication.schemas import user_schema,token_schema
 from authentication.api.deps import get_db
 
 #jwt
-from typing import Optional, MutableMapping, List, Union
+from typing import MutableMapping, List, Union
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 

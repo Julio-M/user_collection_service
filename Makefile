@@ -19,7 +19,7 @@ test-health:
 
 run: guard-module
 	# make run
-	# @ source deploy.sh ; runLocally $(module)
+	@ source deploy.sh ; runLocally $(module)
 
 deploy:
 	# make deploy
@@ -35,20 +35,22 @@ deploy-local:
 
 test: guard-module
 	# make test
-	# @ source setup.sh ; test $(module)
+	@ source deploy.sh ; test $(module)
 
 cleanup:
 	# make cleanup
-	# @ echo "$(ccso)--> Cleaning up all auxiliary files $(ccend)"
-	# @ source setup.sh ; cleanup
+	@ echo "$(ccso)--> Cleaning up all auxiliary files $(ccend)"
+	@ source deploy.sh ; cleanup
 
 migrations: guard-name
 	# make migrations
-	# @ source setup.sh ; makeMigrations $(name)
+	@ echo "$(ccso)--> Creating migrations $(ccend)"
+	@ source deploy.sh ; makeMigrations $(name)
 
 migrate:
 	# migrate
-	# @ source setup.sh ; migrate
+	@ echo "$(ccso)--> Migrating $(ccend)"
+	@ source deploy.sh ; migrate
 
 
 
