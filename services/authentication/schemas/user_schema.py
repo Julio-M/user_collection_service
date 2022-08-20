@@ -1,14 +1,14 @@
-from typing import List, Union
+from typing import List, Union, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr
 
 #USER pydantic
 class UserBase(BaseModel):
   first_name:str
   last_name:str
   username:str
-  email:str
-  is_active:Union[bool, None] = None
+  email:EmailStr
+  is_active:Optional[bool] = True
 
 class UserCreate(UserBase):
   password:str
@@ -21,3 +21,14 @@ class User(UserBase):
   # This Config class is used to provide configurations to Pydantic.
   class Config:
     orm_mode=True
+
+# Properties to receive via API on update
+class UserUpdate(UserBase):
+    password: Optional[str] = None
+
+
+class UserInDBBase(UserBase):
+    id: Optional[int] = None
+
+    class Config:
+        orm_mode = True

@@ -9,7 +9,7 @@ from authentication.schemas import user_schema,token_schema
 from authentication.api.deps import get_db
 
 #jwt
-from typing import MutableMapping, List, Union
+from typing import MutableMapping, List, Union, Any
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 
@@ -20,15 +20,15 @@ JWTPayloadMapping = MutableMapping[
 
 router = APIRouter()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/token")
 
 @router.get("/login")
 def login():
   return {"message":"hello from login endpoint"}
 
 @router.post("/token", response_model=token_schema.Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_db)):
-    user = user_crud.authenticate_user(db, form_data.username, form_data.password)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_db))-> Any:
+    user = user_crud.user.authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -43,7 +43,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 @router.get('/users/{username}',response_model=user_schema.User)
 async def read_users_by_username(username: str, db: Session = Depends(get_db)):
-  db_user = user_crud.get_user_by_username(db,username)
+  db_user = user_crud.user.get_user_by_username(db,username)
   if db_user is None:
       raise HTTPException(status_code=404, detail="User not found")
   return db_user
@@ -55,3 +55,8 @@ async def read_users_me(current_user: user_schema.User = Depends(user_crud.get_c
 @router.get("/items/")
 async def read_items(token: str = Depends(oauth2_scheme)):
     return {"token": token}
+
+@router.get("/update_me", response_model=user_schema.User)
+async def update_user_me():
+    print("Updated")
+
