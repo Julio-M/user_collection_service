@@ -11,7 +11,8 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import Union
 from authentication.api.deps import get_db
 from authentication.core.hashing import Hasher
-from authentication.core.config import SECRET_KEY
+from authentication.core.config import SECRET_KEY, logger
+import traceback
 
 #jwt
 #PWD Authentication
@@ -23,7 +24,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 #get user by username
 def get_user_by_username(db: Session, username: str):
     return db.query(user_model.User).filter(user_model.User.username == username).first()

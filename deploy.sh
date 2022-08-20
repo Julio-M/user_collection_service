@@ -150,7 +150,7 @@ function test(){
 function runLocally() {
   # Variables needed for executing apps locally
   export DB_URI="sqlite:///database.db"
-  export SECRET_KEY="3b7909e3c9914ad1724bacc506ddfa2419516721f13c8e2dfb7c3c447b442008"
+  export SECRET_KEY="secretkey"
   export PYTHONPATH="$(pwd)/services/${moduleName}"
   export ES_HOST_NAME="localhost"
 
@@ -184,7 +184,7 @@ function cleanup() {
   rm -rf services/__pycache__
   rm -rf services/alembic/__pycache__
   rm -rf services/alembic/versions/__pycache__
-  # rm -rf services/alembic/versions/*.py
+  rm -rf services/alembic/versions/*.py
   # shellcheck disable=SC2012
   for file in $(ls -d services/*/ | cut -f2 -d'/') ; do
     echo "Deleting ${file}"
