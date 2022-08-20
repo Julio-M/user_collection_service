@@ -2,8 +2,13 @@ from typing import List, Union
 
 from pydantic import BaseModel
 
+#USER pydantic
 class UserBase(BaseModel):
+  first_name:str
+  last_name:str
+  username:str
   email:str
+  is_active:Union[bool, None] = None
 
 class UserCreate(UserBase):
   password:str
