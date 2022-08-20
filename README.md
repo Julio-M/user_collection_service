@@ -11,8 +11,28 @@ This repository is single source of truth for
 
 ### How to run the code locally ?
 
+This will create a venv, install all the dependencied and start the server
+
 ```shell script
 make run module=authentication
+```
+
+### How to make migrations ?
+
+```shell script
+make migrations name=<nameyourmigration>
+```
+
+```shell script
+make migrate
+```
+
+### How to cleanup the enviroment ?
+
+This will delete the venv, migrations files and the temporary database
+
+```shell script
+make cleanup
 ```
 
 ### I want to run test cases for a service?
@@ -30,24 +50,43 @@ make test module=authentication
 ├── deploy.sh
 └── services
     ├── __init__.py
-    ├── authentication
-    │   ├── __init__.py
-    │   ├── core
-    │   │   ├── models
-    │   │   │   └── __init__.py
-    │   │   ├── schemas
-    │   │   │   └── __init__.py
-    │   │   └── settings.py
-    │   ├── main.py
-    │   ├── tests
-    │   │   ├── __init__.py
-    │   │   └── v1
-    │   │       └── __init__.py
-    │   └── v1
-    │       ├── __init__.py
-    │       └── endpoints
-    │           └── __init__.py
-    └── authorizer
+    ├── alembic
+    │   ├── README
+    │   ├── env.py
+    │   ├── script.py.mako
+    │   └── versions
+    ├── alembic.ini
+    └── authentication
+        ├── __init__.py
+        ├── api
+        │   ├── __init__.py
+        │   ├── api_v1
+        │   │   ├── __init__.py
+        │   │   ├── api.py
+        │   │   └── endpoints
+        │   │       ├── __init__.py
+        │   │       ├── login.py
+        │   │       └── signup.py
+        │   └── deps.py
+        ├── core
+        │   ├── config.py
+        │   └── hashing.py
+        ├── crud
+        │   └── user_crud.py
+        ├── db
+        │   ├── __initi__.py
+        │   ├── base_class.py
+        │   └── session.py
+        ├── main.py
+        ├── models
+        │   ├── __init__.py
+        │   └── user_model.py
+        ├── requirements.txt
+        ├── schemas
+        │   ├── token_schema.py
+        │   └── user_schema.py
+        ├── tests
+        └── utils.py
 ```
 
 **./services/**: Independent python modules for each service.

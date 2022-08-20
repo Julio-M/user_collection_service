@@ -8,6 +8,7 @@ test.db
 /.cache/
 
 *.db
+__pycache__
 
 *.code-workspace
 packaged.yaml

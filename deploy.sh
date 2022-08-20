@@ -194,6 +194,7 @@ function cleanup() {
   rm -rf .aws-sam || true
   # rm -rf .python-version || true
   find . -name "*.db" -delete
+  find . -name "*_pychace_" -delete
 }
 
 function makeMigrations() {
