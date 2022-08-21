@@ -131,6 +131,7 @@ function test(){
   fi
   if venvExists "$1"; then
     echo "Existing venv found"
+
   else
     createNewVenv "${moduleName}"
   fi
@@ -143,15 +144,12 @@ function test(){
   activateEnv "${moduleName}" &&
   pytest -rf -v -p no:warnings \
     --disable-pytest-warnings ./services/${moduleName}/tests
-
-
 }
 
 function runLocally() {
   # Variables needed for executing apps locally
   export DB_URI="sqlite:///database.db"
   export SECRET_KEY="secretkey"
-  export REFRESH_TOKEN="refresh"
   export PYTHONPATH="$(pwd)/services/${moduleName}"
   export ES_HOST_NAME="localhost"
 
@@ -182,22 +180,20 @@ function runLocally() {
 
 function cleanup() {
   # shellcheck disable=SC2012
-  echo "${ccso}--> Removing cache <-----${ccend}"
   rm -rf services/__pycache__
   rm -rf services/alembic/__pycache__
   rm -rf services/alembic/versions/__pycache__
-  echo "${ccso}--> Removing migrations <-----${ccend}"
   rm -rf services/alembic/versions/*.py
   # shellcheck disable=SC2012
   for file in $(ls -d services/*/ | cut -f2 -d'/') ; do
-    echo "${ccso}--> Removing ${file} <-----${ccend}"
+    echo "Deleting ${file}"
     deleteEnv "${file}" || true
   done
   # undeploy
-  # rm -rf .aws-sam || true
+  rm -rf .aws-sam || true
   # rm -rf .python-version || true
-  echo "${ccso}--> Removing sqlitedb files <-----${ccend}"
   find . -name "*.db" -delete
+  find . -name "*_pychace_" -delete
 }
 
 function makeMigrations() {
