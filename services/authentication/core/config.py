@@ -33,6 +33,7 @@ try:
 
     DATABASE_URL = os.environ.get('DB_URI')
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    REFRESH_TOKEN = os.environ.get('REFRESH_TOKEN')
 
 
 except Exception as e:

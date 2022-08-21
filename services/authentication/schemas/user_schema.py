@@ -23,9 +23,8 @@ class User(UserBase):
     orm_mode=True
 
 # Properties to receive via API on update
-class UserUpdate(UserBase):
-    password: Optional[str] = None
-
+class UserUpdate(BaseModel):
+    username:str
 
 class UserInDBBase(UserBase):
     id: Optional[int] = None

@@ -20,7 +20,7 @@ JWTPayloadMapping = MutableMapping[
 
 router = APIRouter()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/token",scheme_name="JWT")
 
 @router.get("/login")
 def login():
@@ -35,11 +35,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    #code below re tokens can be refactored
     access_token_expires = timedelta(minutes=user_crud.ACCESS_TOKEN_EXPIRE_MINUTES)
+    refresh_token_expires = timedelta(minutes=user_crud.REFRESH_TOKEN_EXPIRE_MINUTES)
     access_token = user_crud.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = user_crud.create_refresh_token(data={"sub": user.username}, expires_delta=refresh_token_expires)
+    return {"access_token": access_token, "refresh_token": refresh_token,"token_type": "bearer"}
 
 @router.get('/users/{username}',response_model=user_schema.User)
 async def read_users_by_username(username: str, db: Session = Depends(get_db)):
@@ -56,7 +59,24 @@ async def read_users_me(current_user: user_schema.User = Depends(user_crud.get_c
 async def read_items(token: str = Depends(oauth2_scheme)):
     return {"token": token}
 
-@router.get("/update_me", response_model=user_schema.User)
-async def update_user_me():
-    print("Updated")
+@router.put("/update/me/{user_id}",status_code=status.HTTP_201_CREATED)
+async def read_users_me(
+     *,
+    db: Session = Depends(get_db),
+    user_id: int,
+    user_in: user_schema.UserUpdate,
+    current_user: user_schema.User = Depends(user_crud.get_current_active_user)
+    ) -> Any:
+    """
+    Update a user.
+    """
+    print(current_user)
+    user = user_crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user with this username does not exist in the system",
+        )
+    user = user_crud.user.update(db, db_obj=user, obj_in=user_in)
+    return user
 

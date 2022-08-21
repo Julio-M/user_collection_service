@@ -14,7 +14,7 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import Union
 from authentication.api.deps import get_db
 from authentication.core.hashing import Hasher
-from authentication.core.config import SECRET_KEY, logger
+from authentication.core.config import SECRET_KEY, logger, REFRESH_TOKEN
 import traceback
 
 #jwt
@@ -23,10 +23,14 @@ import traceback
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = SECRET_KEY
+REFRESH_TOKEN = REFRESH_TOKEN
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
+REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+#refactor the below -> same code in login.py
+# OAuth2PasswordBearer takes two required parameters. tokenUrl is the URL in your application that handles user login and return tokens. scheme_name set to JWT will allow the frontend swagger docs to call tokenUrl from the frontend and save tokens in memory.
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/token",scheme_name="JWT")
 
 class CRUDUser(CRUDBase[user_model.User,user_schema.User,user_schema.UserUpdate]):
 
@@ -58,10 +62,6 @@ class CRUDUser(CRUDBase[user_model.User,user_schema.User,user_schema.UserUpdate]
             update_data = obj_in
         else:
             update_data = obj_in.dict(exclude_unset=True)
-        if update_data["password"]:
-            hashed_password = Hasher.get_password_hash(update_data["password"])
-            del update_data["password"]
-            update_data["hashed_password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def authenticate_user(self,db:Session, username: str, password: str) -> Optional[user_model.User]:
@@ -94,6 +94,8 @@ async def get_current_user(db: Session = Depends(get_db),token: str = Depends(oa
             raise credentials_exception
         return db_user
 
+# Access and refresh token
+# code below can be refactored (create_access_token & create_refresh_token)
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -102,6 +104,16 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def create_refresh_token(data: dict, expires_delta: Union[timedelta, None] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, REFRESH_TOKEN, algorithm=ALGORITHM)
     return encoded_jwt
 
 async def get_current_active_user(current_user: user_schema.User = Depends(get_current_user)):
