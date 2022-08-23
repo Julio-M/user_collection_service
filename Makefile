@@ -13,7 +13,7 @@ ccgreen=$(shell tput setaf 2)
 ccso=$(shell tput smso)
 
 
-test-health:
+test-health: guard-one guard-two
 	# make test
 	@ source deploy.sh ; health
 
@@ -42,10 +42,10 @@ cleanup:
 	@ echo "$(ccso)--> Cleaning up all auxiliary files $(ccend)"
 	@ source deploy.sh ; cleanup
 
-migrations: guard-name
+migrations: guard-module guard-name
 	# make migrations
 	@ echo "$(ccso)--> Creating migrations $(ccend)"
-	@ source deploy.sh ; makeMigrations $(name)
+	@ source deploy.sh ; makeMigrations $(module) ${name}
 
 migrate:
 	# migrate

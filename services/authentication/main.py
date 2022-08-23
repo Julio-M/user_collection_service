@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends
 from functools import lru_cache
-from pythonjsonlogger import jsonlogger 
+from pythonjsonlogger import jsonlogger
 from fastapi.middleware.cors import CORSMiddleware
 
-from authentication.api.api_v1.api import api_router
-from authentication.core.config import PROJECT_NAME, API_V1_STR,logger, TZ
+from api.api_v1.api import api_router
+from core.config import PROJECT_NAME, API_V1_STR, logger, TZ
 
 app = FastAPI(title=PROJECT_NAME)
 
@@ -19,4 +19,4 @@ app.add_middleware(
 )
 
 
-app.include_router(api_router,prefix=API_V1_STR)
+app.include_router(api_router, prefix=API_V1_STR)
