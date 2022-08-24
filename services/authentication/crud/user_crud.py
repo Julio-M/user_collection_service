@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, status, Depends
 from models import user_model
 from schemas import user_schema
+from core.config import logger
 
 from .base_crud import CRUDBase
 from typing import Any, Dict, Optional, Union
@@ -44,14 +45,20 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
     # add that instance object to your database session.
     # commit the changes to the database (so that they are saved).
     # refresh your instance (so that it contains any new data from the database, like the generated ID).
-    def create_user(self, db: Session, user: user_schema.UserCreate) -> user_model.User:
-        hashed_password = Hasher.get_password_hash(user.password)
-        db_user = user_model.User(first_name=user.first_name, last_name=user.last_name,
-                                  username=user.username, email=user.email, hashed_password=hashed_password)
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
-        return db_user
+    def create_user(self, db: Session, user: user_schema.UserCreate,request_id: str = "") -> user_model.User:
+        _extra = {'context': {'request_id': request_id}}
+        try:
+            hashed_password = Hasher.get_password_hash(user.password)
+            db_user = user_model.User(first_name=user.first_name, last_name=user.last_name,
+                                    username=user.username, email=user.email, hashed_password=hashed_password)
+            db.add(db_user)
+            db.commit()
+            db.refresh(db_user)
+            return True, 200, None
+        except Exception as e:
+            logger.error(e, extra=_extra)
+            logger.error(traceback.format_exc(), extra=_extra)
+            return False, 500, "Server Exception"
 
     def update(
         self, db: Session, *, db_obj: user_model.User, obj_in: Union[user_schema.UserUpdate, Dict[str, Any]]

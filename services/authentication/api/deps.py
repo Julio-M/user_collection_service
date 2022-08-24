@@ -1,7 +1,7 @@
 # from db.session import SessionLocal  # 1
 
 from db.session import db_session
-
+from fastapi import Request
 
 # We import the ORM session class SessionLocal from app/db/session.py
 # We instantiate the session
@@ -15,3 +15,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def get_correlation_id(request: Request):
+    return request.state.x_request_id

@@ -198,6 +198,8 @@ function cleanup() {
     # rm -rf .python-version || true
     find . -name "*.db" -delete
     find . -name "*_pychace_" -delete
+    # python file to delete test tables
+    # python delete_tables_from_test_db.py
 }
 
 # function makeMigrations() {

@@ -36,8 +36,8 @@ class TestDb(TestCase):
 
         self.sample_first_name = 'john'
         self.sample_last_name = 'doe'
-        self.sample_username = 'johnfirst'
-        self.sample_email = 'johndoe@example.com'
+        self.sample_username = 'john2'
+        self.sample_email = 'johndoe2@example.com'
         self.sample_is_active = True
         self.sample_pwd = 'password123'
 
@@ -55,3 +55,12 @@ class TestDb(TestCase):
 
         # Check if the method returned expected value.
         self.assertTrue(response)
+        self.assertEqual(response.first_name,self.sample_username)
+        self.assertEqual(response.username,self.sample_username)
+        # self.assertEqual(response.json(), {
+        #     "first_name": self.sample_first_name,
+        #     "last_name": self.sample_last_name,
+        #     "username": self.sample_username,
+        #     "email": self.sample_email ,
+        #     "is_active": self.sample_is_active,
+        # })
