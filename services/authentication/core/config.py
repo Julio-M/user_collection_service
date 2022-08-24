@@ -31,7 +31,7 @@ try:
     ENDPOINT = "test"
     PROJECT_NAME = "HomeApp"
     TZ = "America/New_York"
-    LOGIN_ENDPOINT = "token"
+    LOGIN_ENDPOINT = "login"
 
     # Env variables
 

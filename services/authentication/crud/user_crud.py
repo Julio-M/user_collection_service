@@ -69,6 +69,9 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
         if not Hasher.verify_password(password, user.hashed_password):
             return False
         return user
+    
+    def is_superuser(self, user: user_model.User) -> bool:
+        return user.is_superuser
 
 
 user = CRUDUser(user_model.User)

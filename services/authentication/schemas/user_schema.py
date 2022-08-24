@@ -9,6 +9,7 @@ class UserBase(BaseModel):
   username:str
   email:EmailStr
   is_active:Optional[bool] = True
+  is_superuser:Optional[bool] = False
 
 class UserCreate(UserBase):
   password:str
@@ -16,7 +17,6 @@ class UserCreate(UserBase):
 # Notice that the User, the Pydantic model that will be used when reading a user (returning it from the API) doesn't include the password
 class User(UserBase):
   id: int
-  is_active: bool
 
   # This Config class is used to provide configurations to Pydantic.
   class Config:
