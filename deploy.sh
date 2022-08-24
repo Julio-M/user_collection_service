@@ -19,6 +19,7 @@ export BASE_DIR=$(pwd)
 
 function health() {
     echo "I am reachable"
+    echo "$(whoami)"
 }
 
 function setupEnvironment() {
@@ -137,7 +138,7 @@ function test(){
     fi
     
     moduleName=$1
-    export DB_URI="postgresql://juliomihali:juliomihali@localhost:5432/usersdb?connect_timeout=10"
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
     # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"
@@ -149,7 +150,7 @@ function test(){
 
 function runLocally() {
     # Variables needed for executing apps locally
-    export DB_URI="postgresql://juliomihali:juliomihali@localhost:5432/usersdb?connect_timeout=10"
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
     # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"
@@ -224,7 +225,7 @@ function makeMigrations() {
     fi
     
     moduleName=$1
-    export DB_URI="postgresql://user:user@localhost:5432/usersdb?connect_timeout=10"
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
     # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"

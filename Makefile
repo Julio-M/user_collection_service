@@ -13,7 +13,7 @@ ccgreen=$(shell tput setaf 2)
 ccso=$(shell tput smso)
 
 
-test-health: guard-one guard-two
+test-health:
 	# make test
 	@ source deploy.sh ; health
 
