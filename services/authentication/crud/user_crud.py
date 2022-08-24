@@ -15,7 +15,7 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import Union
 from api.deps import get_db
 from core.hashing import Hasher
-from core.config import SECRET_KEY, logger, REFRESH_TOKEN
+from core.config import SECRET_KEY, logger, REFRESH_TOKEN, oauth2_scheme
 import traceback
 
 # jwt
@@ -28,12 +28,6 @@ REFRESH_TOKEN = REFRESH_TOKEN
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
-
-# refactor the below -> same code in login.py
-# OAuth2PasswordBearer takes two required parameters. tokenUrl is the URL in your application that handles user login and return tokens. scheme_name set to JWT will allow the frontend swagger docs to call tokenUrl from the frontend and save tokens in memory.
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="api/v1/token")
-
 
 class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdate]):
 

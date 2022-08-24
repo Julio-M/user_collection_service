@@ -1,6 +1,7 @@
-from typing import Generator
+# from db.session import SessionLocal  # 1
 
-from db.session import SessionLocal  # 1
+from db.session import db_session
+
 
 # We import the ORM session class SessionLocal from app/db/session.py
 # We instantiate the session
@@ -8,9 +9,9 @@ from db.session import SessionLocal  # 1
 # We make sure we close the DB connection by using the finally clause of the try block - meaning that the DB session is always closed. This releases connection objects associated with the session and leaves the session ready to be used again.
 
 
-def get_db() -> Generator:
-    db = SessionLocal()  # 2
+def get_db():
+    db = db_session()
     try:
-        yield db  # 3
+        yield db
     finally:
-        db.close()  # 4
+        db.close()

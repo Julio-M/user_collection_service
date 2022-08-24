@@ -137,8 +137,8 @@ function test(){
     fi
     
     moduleName=$1
-    # export DB_URI="postgresql://developer:developer@localhost:5432/test_db_utils?connect_timeout=10"
-    export DB_URI="sqlite:///database.db"
+    export DB_URI="postgresql://juliomihali:juliomihali@localhost:5432/usersdb?connect_timeout=10"
+    # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"
     export PYTHONPATH=$(realpath ./services/${moduleName})
@@ -149,7 +149,8 @@ function test(){
 
 function runLocally() {
     # Variables needed for executing apps locally
-    export DB_URI="sqlite:///database.db"
+    export DB_URI="postgresql://juliomihali:juliomihali@localhost:5432/usersdb?connect_timeout=10"
+    # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"
     export PYTHONPATH="$(pwd)/services/${moduleName}"
@@ -183,9 +184,9 @@ function runLocally() {
 function cleanup() {
     # shellcheck disable=SC2012
     rm -rf services/__pycache__
-    # rm -rf services/alembic/__pycache__
-    # rm -rf services/alembic/versions/__pycache__
-    # rm -rf services/alembic/versions/*.py
+    rm -rf services/alembic/__pycache__
+    rm -rf services/alembic/versions/__pycache__
+    rm -rf services/alembic/versions/*.py
     # shellcheck disable=SC2012
     for file in $(ls -d services/*/ | cut -f2 -d'/') ; do
         echo "Deleting ${file}"
@@ -194,8 +195,8 @@ function cleanup() {
     # undeploy
     # rm -rf .aws-sam || true
     # rm -rf .python-version || true
-    # find . -name "*.db" -delete
-    # find . -name "*_pychace_" -delete
+    find . -name "*.db" -delete
+    find . -name "*_pychace_" -delete
 }
 
 # function makeMigrations() {
@@ -223,8 +224,8 @@ function makeMigrations() {
     fi
     
     moduleName=$1
-    # export DB_URI="postgresql://developer:developer@localhost:5432/test_db_utils?connect_timeout=10"
-    export DB_URI="sqlite:///database.db"
+    export DB_URI="postgresql://user:user@localhost:5432/usersdb?connect_timeout=10"
+    # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"
     export PYTHONPATH=$(realpath ./services/${moduleName})

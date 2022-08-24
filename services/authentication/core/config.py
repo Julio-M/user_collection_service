@@ -5,6 +5,9 @@ from sys import exit
 import logging
 from pythonjsonlogger import jsonlogger
 
+# 3rd party
+from fastapi.security import OAuth2PasswordBearer
+
 try:
     class CustomJsonFormatter(jsonlogger.JsonFormatter):
         def add_fields(self, log_record, record, message_dict):
@@ -28,12 +31,19 @@ try:
     ENDPOINT = "test"
     PROJECT_NAME = "HomeApp"
     TZ = "America/New_York"
+    LOGIN_ENDPOINT = "token"
 
-    #Env variables
+    # Env variables
 
     DATABASE_URL = os.environ.get('DB_URI')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     REFRESH_TOKEN = os.environ.get('REFRESH_TOKEN')
+
+    # OAuth2PasswordBearer takes two required parameters. tokenUrl is the URL in your application that handles user login and return tokens. scheme_name set to JWT will allow the frontend swagger docs to call tokenUrl from the frontend and save tokens in memory.
+    oauth2_scheme = OAuth2PasswordBearer(
+        tokenUrl=f"{API_V1_STR}/${LOGIN_ENDPOINT}")
+    
+    print(f"Configs initialized for {API_V1_STR}")
 
 
 except Exception as e:

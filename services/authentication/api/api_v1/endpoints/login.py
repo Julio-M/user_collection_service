@@ -12,6 +12,7 @@ from api.deps import get_db
 from typing import MutableMapping, List, Union, Any
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
+from core.config import oauth2_scheme
 
 
 JWTPayloadMapping = MutableMapping[
@@ -19,10 +20,6 @@ JWTPayloadMapping = MutableMapping[
 ]
 
 router = APIRouter()
-
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="api/v1/token")
-
 
 @router.get("/login")
 def login():
