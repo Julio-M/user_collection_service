@@ -14,7 +14,7 @@ from core.config import oauth2_scheme
 
 router = APIRouter()
 
-@router.post("/login", response_model=token_schema.Token)
+@router.post("/login", response_model=token_schema.Token,status_code=status.HTTP_200_OK)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)) -> Any:
     user = user_crud.user.authenticate_user(
         db, form_data.username, form_data.password)
