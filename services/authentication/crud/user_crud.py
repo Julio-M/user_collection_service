@@ -63,7 +63,6 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def authenticate_user(self, db: Session, username: str, password: str) -> Optional[user_model.User]:
-        print(password)
         user = self.get_user_by_username(db, username)
         if not user:
             return False

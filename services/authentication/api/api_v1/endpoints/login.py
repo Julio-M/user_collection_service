@@ -28,7 +28,6 @@ def login():
 
 @router.post("/token", response_model=token_schema.Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)) -> Any:
-    print('from endpoint',form_data.password)
     user = user_crud.user.authenticate_user(
         db, form_data.username, form_data.password)
     if not user:
