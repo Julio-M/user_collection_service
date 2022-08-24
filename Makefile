@@ -52,5 +52,8 @@ migrate:
 	@ echo "$(ccso)--> Migrating $(ccend)"
 	@ source deploy.sh ; migrate
 
-
+setup-env:
+	# migrate
+	@ echo "$(ccso)--> setting up $(ccend)"
+	@ source deploy.sh ; setupEnvironment
 
