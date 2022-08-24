@@ -41,7 +41,7 @@ try:
 
     # OAuth2PasswordBearer takes two required parameters. tokenUrl is the URL in your application that handles user login and return tokens. scheme_name set to JWT will allow the frontend swagger docs to call tokenUrl from the frontend and save tokens in memory.
     oauth2_scheme = OAuth2PasswordBearer(
-        tokenUrl=f"{API_V1_STR}/${LOGIN_ENDPOINT}")
+        tokenUrl=f"{API_V1_STR}/{LOGIN_ENDPOINT}")
     
     print(f"Configs initialized for {API_V1_STR}")
 

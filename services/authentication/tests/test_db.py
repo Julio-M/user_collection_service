@@ -1,53 +1,57 @@
 # in-built
-from fastapi.testclient import TestClient
+from unittest import TestCase
+
+# 3rd party
+from pydantic import ValidationError
+import testing.postgresql
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-from db.base_class import Base
+# custom
+from models.user_model import Base
+from db.session import db_engine
+from core.config import DATABASE_URL
+from schemas.user_schema import UserCreate
 from api.deps import get_db
+from core.hashing import Hasher
+from crud.user_crud import user 
 
-from main import app
+# Launch new PostgreSQL server
+with testing.postgresql.Postgresql() as postgresql:
+    # connect to PostgreSQL
+    engine = create_engine(postgresql.url())
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+class MockUtilsWithError:
+    def hash_password(self):
+        raise Exception("Intentionally induced error")
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-TestingSessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=engine)
+class TestDb(TestCase):
+    def setUp(self) -> None:
+        Base.metadata.create_all(bind=db_engine)
+        self.DB_URL = DATABASE_URL
 
-Base.metadata.create_all(bind=engine)
+         # class members
+        self.events = user
+        self.db = next(get_db())
+        self.utils = Hasher()
 
+        self.sample_first_name = 'john'
+        self.sample_last_name = 'doe'
+        self.sample_username = 'johnfirst'
+        self.sample_email = 'johndoe@example.com'
+        self.sample_is_active = True
+        self.sample_pwd = 'password123'
 
-def override_get_db():
-    try:
-        db = TestingSessionLocal()
-        yield db
-    finally:
-        db.close()
+        self.user_schema = UserCreate(first_name=self.sample_first_name, last_name=self.sample_last_name, username=self.sample_username,email=self.sample_email,password=self.sample_pwd)
 
+        self.wrong_email = 'wrong@email.com'
+        self.wrong_password = 'wrongpassword123'
 
-app.dependency_overrides[get_db] = override_get_db
+    @staticmethod
+    def get_induced_error():
+        raise Exception("Intentionally raised error")
+        
+    def test_create_user_with_valid_user_schema(self):
+        response = self.events.create_user(db=self.db, user=self.user_schema)
 
-client = TestClient(app)
-
-
-def test_create_user():
-    response = client.post(
-        "http://0.0.0.0:9558/api/v1/signup/",
-        json={
-            "first_name": "john",
-            "last_name": "doe",
-            "email": "user2@example.com",
-            "username": "johndoe2",
-            "is_active": True,
-            "password": "secret"
-        },
-    )
-    assert response.status_code == 201, response.text
-    data = response.json()
-    assert data["email"] == "user@example.com"
-    assert data["first_name"] == "john"
-    assert data["last_name"] == "doe"
-    assert data["username"] == "johndoe"
-    assert "id" in data
+        # Check if the method returned expected value.
+        self.assertTrue(response)
