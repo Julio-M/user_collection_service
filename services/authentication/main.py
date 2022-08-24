@@ -4,6 +4,8 @@ from pythonjsonlogger import jsonlogger
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 import pendulum
+from fastapi.responses import JSONResponse
+
 
 # in-built
 import json
@@ -26,7 +28,7 @@ app.add_middleware(
 
 
 app.include_router(api_router, prefix=API_V1_STR)
-handler = Mangum(app, enable_lifespan=False)
+handler = Mangum(app, lifespan="off")
 
 @app.middleware("http")
 async def log_http_request_attributes(request: Request, call_next):
@@ -43,7 +45,6 @@ async def log_http_request_attributes(request: Request, call_next):
     content = b''
     async for chunk in response.body_iterator:
         content += chunk
-
     response_data = json.loads(content)
 
     request_attrs = {

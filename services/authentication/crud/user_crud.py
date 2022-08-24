@@ -54,7 +54,8 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
             db.add(db_user)
             db.commit()
             db.refresh(db_user)
-            return True, 200, None
+            print("#######################from curd user",db_user)
+            return True, 201, db_user
         except Exception as e:
             logger.error(e, extra=_extra)
             logger.error(traceback.format_exc(), extra=_extra)
