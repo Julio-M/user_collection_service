@@ -11,6 +11,7 @@ export PY_VERSION=3.9.0
 export PYENV_ROOT=$(pyenv root)/
 # export TEMPLATE_FILE_NAME="TBD"
 export BASE_DIR=$(pwd)
+export TERM=xterm-256color
 # export LAMBDA_S3_BUCKET_NAME="TBD"
 # export SAM_TEMPLATE_FILE_NAME="TBD"
 # export CF_STACK_NAME="user-collection-service"
