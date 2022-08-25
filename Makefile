@@ -15,7 +15,7 @@ ccso=$(shell tput smso)
 
 test-health:
 	# make test
-	@ source deploy.sh ; health
+	@ . deploy.sh ; health
 
 format:
 	#format code
@@ -23,7 +23,7 @@ format:
 
 run: guard-module
 	# make run
-	@ source deploy.sh ; runLocally $(module)
+	@ . deploy.sh ; runLocally $(module)
 
 deploy:
 	# make deploy
@@ -39,7 +39,7 @@ deploy-local:
 
 test: guard-module
 	# make test
-	@ source deploy.sh ; test $(module)
+	@ . deploy.sh ; test $(module)
 
 cleanup:
 	# make cleanup
