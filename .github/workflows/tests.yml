@@ -24,17 +24,6 @@ jobs:
       matrix:
         python-version: [3.9]
 
-    services:
-      postgres:
-        image: postgres:14.5-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -42,19 +31,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install enviroment
+      - name: Setup enviroment
         run: |
           brew install pyenv
           pyenv install 3.9.0
           make setup-env
-          make run module=authentication
-
-      # - name: Run Tests
-      #   env:
-      #     SECRET_KEY: secret_key
-      #     DATABASE_URL: postgresql://postgres:postgres@localhost/postgres
-      #   run: |
-      #     make test module=authentication
-      # - name: Format code
-      #   run: |
-      #     make format
+      - name: Install dependencies and run tests
+        run: |
+          make test module=authentication
