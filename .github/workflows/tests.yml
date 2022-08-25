@@ -42,6 +42,7 @@ jobs:
 
       - name: Install enviroment
         run: |
+          brew install pyenv
           pyenv install 3.9.0
           make setup-env
           make run module=authentication
