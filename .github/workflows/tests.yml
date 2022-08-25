@@ -39,7 +39,7 @@ jobs:
 
       - name: Install enviroment
         run: |
-          ../deploy.sh ; runLocally authentication
+          user_collection_service/deploy.sh ; runLocally authentication
 
       # - name: Run Tests
       #   env:
