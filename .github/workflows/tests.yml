@@ -32,11 +32,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Before script
-        run: |
-          before_script:
-            - apk update && apk add bash
-
       - name: Set up Python
         uses: actions/setup-python@v4.2.0
         with:
@@ -44,14 +39,14 @@ jobs:
 
       - name: Install enviroment
         run: |
-          make run module=authentication
+          ../deploy.sh ; runLocally authentication
 
-      - name: Run Tests
-        env:
-          SECRET_KEY: secret_key
-          DATABASE_URL: postgresql://postgres:postgres@localhost/postgres
-        run: |
-          make test module=authentication
-      - name: Format code
-        run: |
-          make format
+      # - name: Run Tests
+      #   env:
+      #     SECRET_KEY: secret_key
+      #     DATABASE_URL: postgresql://postgres:postgres@localhost/postgres
+      #   run: |
+      #     make test module=authentication
+      # - name: Format code
+      #   run: |
+      #     make format
