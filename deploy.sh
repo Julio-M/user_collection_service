@@ -2,8 +2,8 @@
 
 set -e
 
-ccend=$(tput sgr0)
-ccso=$(tput smso)
+# ccend=$(tput sgr0)
+# ccso=$(tput smso)
 
 ######### CONSTANTS #############################
 
