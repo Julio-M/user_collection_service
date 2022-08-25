@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set | grep TERM
 
 # ccend=$(tput sgr0)
 # ccso=$(tput smso)
