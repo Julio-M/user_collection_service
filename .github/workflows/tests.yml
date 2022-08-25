@@ -33,6 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - before_script:
+          - apk update && apk add bash
+
       - name: Set up Python
         uses: actions/setup-python@v4.2.0
         with:
