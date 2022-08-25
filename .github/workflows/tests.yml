@@ -42,6 +42,7 @@ jobs:
 
       - name: Install enviroment
         run: |
+          make setup-env
           make run module=authentication
 
       # - name: Run Tests
