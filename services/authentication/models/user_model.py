@@ -1,6 +1,8 @@
-from sqlite3 import Date
 from sqlalchemy import Column, Integer, String, Boolean, Date
 from db.base_class import Base
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 
 class User(Base):

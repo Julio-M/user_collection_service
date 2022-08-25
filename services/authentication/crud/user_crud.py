@@ -29,11 +29,18 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 
+
 class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdate]):
 
     # get user by username
-    def get_user_by_username(self, db: Session, username: str) -> Optional[user_model.User]:
-        return db.query(user_model.User).filter(user_model.User.username == username).first()
+    def get_user_by_username(
+        self, db: Session, username: str
+    ) -> Optional[user_model.User]:
+        return (
+            db.query(user_model.User)
+            .filter(user_model.User.username == username)
+            .first()
+        )
 
     # get user by email
     def get_user_by_email(self, db: Session, email: str) -> Optional[user_model.User]:
@@ -46,15 +53,24 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
     # refresh your instance (so that it contains any new data from the database, like the generated ID).
     def create_user(self, db: Session, user: user_schema.UserCreate) -> user_model.User:
         hashed_password = Hasher.get_password_hash(user.password)
-        db_user = user_model.User(first_name=user.first_name, last_name=user.last_name,
-                                  username=user.username, email=user.email, hashed_password=hashed_password)
+        db_user = user_model.User(
+            first_name=user.first_name,
+            last_name=user.last_name,
+            username=user.username,
+            email=user.email,
+            hashed_password=hashed_password,
+        )
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
         return db_user
 
     def update(
-        self, db: Session, *, db_obj: user_model.User, obj_in: Union[user_schema.UserUpdate, Dict[str, Any]]
+        self,
+        db: Session,
+        *,
+        db_obj: user_model.User,
+        obj_in: Union[user_schema.UserUpdate, Dict[str, Any]]
     ) -> user_model.User:
         if isinstance(obj_in, dict):
             update_data = obj_in
@@ -62,14 +78,16 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
             update_data = obj_in.dict(exclude_unset=True)
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
-    def authenticate_user(self, db: Session, username: str, password: str) -> Optional[user_model.User]:
+    def authenticate_user(
+        self, db: Session, username: str, password: str
+    ) -> Optional[user_model.User]:
         user = self.get_user_by_username(db, username)
         if not user:
             return False
         if not Hasher.verify_password(password, user.hashed_password):
             return False
         return user
-    
+
     def is_superuser(self, user: user_model.User) -> bool:
         return user.is_superuser
 
@@ -77,7 +95,9 @@ class CRUDUser(CRUDBase[user_model.User, user_schema.User, user_schema.UserUpdat
 user = CRUDUser(user_model.User)
 
 
-async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> Optional[user_model.User]:
+async def get_current_user(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+) -> Optional[user_model.User]:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -95,6 +115,7 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     if db_user is None:
         raise credentials_exception
     return db_user
+
 
 # Access and refresh token
 # code below can be refactored (create_access_token & create_refresh_token)
@@ -122,7 +143,9 @@ def create_refresh_token(data: dict, expires_delta: Union[timedelta, None] = Non
     return encoded_jwt
 
 
-async def get_current_active_user(current_user: user_schema.User = Depends(get_current_user)):
+async def get_current_active_user(
+    current_user: user_schema.User = Depends(get_current_user),
+):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

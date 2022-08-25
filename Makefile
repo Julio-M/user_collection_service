@@ -17,6 +17,10 @@ test-health:
 	# make test
 	@ source deploy.sh ; health
 
+format:
+	#format code
+	black services/
+
 run: guard-module
 	# make run
 	@ source deploy.sh ; runLocally $(module)

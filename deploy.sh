@@ -145,7 +145,8 @@ function test(){
     export PYTHONPATH=$(realpath ./services/${moduleName})
     activateEnv "${moduleName}" &&
     pytest -rf -v -p no:warnings \
-    --disable-pytest-warnings ./services/${moduleName}/tests
+    --disable-pytest-warnings ./services/${moduleName}/tests &&
+    pylint --disable=R,C services/
 }
 
 function runLocally() {
@@ -237,11 +238,12 @@ function makeMigrations() {
     alembic upgrade head
 }
 
-function migrate(){
-    # cd ./services/
-    # alembic upgrade head
-    echo "work in progress"
-}
+# function migrate(){
+#     # cd ./services/
+#     # alembic upgrade head
+#     echo "work in progress"
+# }
+
 
 # function deploy() {
 #   sam validate -t ${TEMPLATE_FILE_NAME}

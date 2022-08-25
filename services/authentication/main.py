@@ -1,10 +1,8 @@
-from fastapi import FastAPI, Depends
-from functools import lru_cache
-from pythonjsonlogger import jsonlogger
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.api_v1.api import api_router
-from core.config import PROJECT_NAME, API_V1_STR, logger, TZ
+from core.config import PROJECT_NAME, API_V1_STR
 
 app = FastAPI(title=PROJECT_NAME)
 
