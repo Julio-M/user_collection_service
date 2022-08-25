@@ -1,3 +1,5 @@
+[![CI](https://github.com/Julio-M/user_collection_service/actions/workflows/workflow.yml/badge.svg)](https://github.com/Julio-M/user_collection_service/actions/workflows/workflow.yml)
+
 ## myHome
 
 ### Introduction
