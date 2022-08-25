@@ -139,7 +139,7 @@ function test(){
     fi
     
     moduleName=$1
-    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
+    export DB_URI="postgresql://postgres:postgres@localhost:5432/usersdb?connect_timeout=10"
     # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"
@@ -227,7 +227,7 @@ function makeMigrations() {
     fi
     
     moduleName=$1
-    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
+    export DB_URI="postgresql://postgres:postgres@localhost:5432/usersdb?connect_timeout=10"
     # export DB_URI="sqlite:///database.db"
     export SECRET_KEY="secret"
     export REFRESH_TOKEN="secret2"

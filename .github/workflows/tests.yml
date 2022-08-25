@@ -19,6 +19,18 @@ jobs:
     defaults:
       run:
         shell: bash
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     strategy:
       matrix:
@@ -37,5 +49,12 @@ jobs:
           pyenv install 3.9.0
           make setup-env
       - name: Install dependencies and run tests
+        env:
+          TEST_DATABASE_HOSTNAME: localhost
+          TEST_DATABASE_PASSWORD: postgres
+          TEST_DATABASE_PORT: 5432
+          TEST_DATABASE_USER: postgres
+          TEST_DATABASE_DB: postgres
         run: |
+          make migrations module=authentication name=userstable
           make test module=authentication
