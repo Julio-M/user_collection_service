@@ -39,7 +39,8 @@ jobs:
 
       - name: Install enviroment
         run: |
-          user_collection_service/deploy.sh ; runLocally authentication
+          make run module=authentication
+        shell: bash
 
       # - name: Run Tests
       #   env:
