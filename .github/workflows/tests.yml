@@ -8,8 +8,8 @@ on:
   pull_request:
     branches:
       - "*"
-  env:
-    CI: true
+env:
+  CI: true
 
 jobs:
   lint:
