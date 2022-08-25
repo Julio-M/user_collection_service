@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 .PHONY: test run deploy deploy-local undeploy cleanup
 .ONESHELL:
 
