@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-.PHONY: test run deploy deploy-local undeploy cleanup
+.PHONY: test run deploy deploy-local undeploy cleanup migrations migrate setup-env
 .ONESHELL:
 
 guard-%:
@@ -56,12 +56,12 @@ migrations: guard-name
 	@ source setup.sh ; makeMigrations ${name}
 
 migrate:
-	# migrate
+	# make migrate
 	@ echo "$(ccso)--> Migrating $(ccend)"
 	@ source setup.sh ; migrate
 
 setup-env: guard-module 
-	# migrate
+	# make setup enviroment
 	@ echo "$(ccso)--> setting up $(ccend)"
 	@ source setup.sh ; activateEnv $(module)
 
