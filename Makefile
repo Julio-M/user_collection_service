@@ -71,4 +71,3 @@ setup-env: guard-module
 deploy-ready:
 	# make migrate
 	@ echo "$(ccso)--> Deploying $(ccend)"
-	@ source setup.sh ; deployReady
