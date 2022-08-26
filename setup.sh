@@ -99,13 +99,15 @@ function cleanup(){
 }
 
 function makeMigrations() {
+    echo "--> Make migrations<-----"
     N=1
     if [ "$#" -ne ${N} ]; then
         echo "makeMigrations needs ${N} parameter(s)"
         exit 1
     fi
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?"
     cd ./services/
-    migrationName=$§
+    migrationName=$1
     echo "--> Making migrations <-----"
     alembic revision --autogenerate -m "${migrationName}"
     echo "--> Done <-----"
@@ -113,6 +115,7 @@ function makeMigrations() {
 
 function migrate(){
     echo "--> Migrate <-----"
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?"
     cd ./services/
     alembic upgrade head
     echo "--> Done <-----"

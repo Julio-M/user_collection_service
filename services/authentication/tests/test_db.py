@@ -36,10 +36,10 @@ class TestDb(TestCase):
         self.db = next(get_db())
         self.utils = Hasher()
 
-        self.sample_first_name = "john"
+        self.sample_first_name = "john3"
         self.sample_last_name = "doe"
-        self.sample_username = "john007"
-        self.sample_email = "johndoe007@example.com"
+        self.sample_username = "john3"
+        self.sample_email = "johndoe3@example.com"
         self.sample_is_active = True
         self.sample_pwd = "password123"
         self.sample_is_superuser = False
