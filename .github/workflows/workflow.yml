@@ -1,5 +1,4 @@
 # This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the workflow will run
@@ -21,7 +20,6 @@ jobs:
     defaults:
       run:
         shell: bash
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -29,7 +27,8 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a script
-        run: Running in dev enviroment
+        run: |
+          echo "Running in dev enviroment"
 
   qa:
     runs-on: ubuntu-latest
@@ -46,7 +45,8 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a script
-        run: Running in qa enviroment
+        run: |
+          echo "Running in qa enviroment"
 
   prod:
     runs-on: ubuntu-latest
@@ -63,4 +63,5 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a script
-        run: Running in prod enviroment
+        run: |
+          echo "Running in prod enviroment"
