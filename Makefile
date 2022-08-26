@@ -65,3 +65,7 @@ setup-env: guard-module
 	@ echo "$(ccso)--> setting up $(ccend)"
 	@ source setup.sh ; activateEnv $(module)
 
+deploy-ready:
+	# make migrate
+	@ echo "$(ccso)--> Deploying $(ccend)"
+	@ source setup.sh ; deployReady

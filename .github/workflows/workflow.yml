@@ -29,6 +29,7 @@ jobs:
       - name: Run a script
         run: |
           echo "Running in dev enviroment"
+          make deploy-ready
 
   qa:
     runs-on: ubuntu-latest

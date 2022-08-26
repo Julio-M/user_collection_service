@@ -135,3 +135,7 @@ function test(){
     --disable-pytest-warnings ./services/${moduleName}/tests &&
     pylint --disable=R,C services/
 }
+
+function deployReady(){
+    echo "Ready to deploy"
+}
