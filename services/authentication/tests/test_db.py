@@ -38,8 +38,8 @@ class TestDb(TestCase):
 
         self.sample_first_name = "john"
         self.sample_last_name = "doe"
-        self.sample_username = "john963"
-        self.sample_email = "johndoe963@example.com"
+        self.sample_username = "john007"
+        self.sample_email = "johndoe007@example.com"
         self.sample_is_active = True
         self.sample_pwd = "password123"
         self.sample_is_superuser = False
