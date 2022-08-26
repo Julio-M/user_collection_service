@@ -13,6 +13,8 @@ __pycache__
 *.code-workspace
 packaged.yaml
 /.aws-sam/
+/data
+
 
 
 # Byte-compiled / optimized / DLL files
@@ -22,7 +24,6 @@ __pycache__/
 
 # C extensions
 *.so
-
 # Distribution / packaging
 .Python
 build/
