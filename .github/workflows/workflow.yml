@@ -31,36 +31,36 @@ jobs:
       - name: Run a script
         run: Running in dev enviroment
 
-    qa:
-      runs-on: ubuntu-latest
-      environment: qa
-      needs: dev
-      defaults:
-        run:
-          shell: bash
+  qa:
+    runs-on: ubuntu-latest
+    environment: qa
+    needs: dev
+    defaults:
+      run:
+        shell: bash
 
-        # Steps represent a sequence of tasks that will be executed as part of the job
-      steps:
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        - uses: actions/checkout@v3
+      # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
-        # Runs a single command using the runners shell
-        - name: Run a script
-          run: Running in qa enviroment
+      # Runs a single command using the runners shell
+      - name: Run a script
+        run: Running in qa enviroment
 
-    prod:
-      runs-on: ubuntu-latest
-      environment: prod
-      needs: qa
-      defaults:
-        run:
-          shell: bash
+  prod:
+    runs-on: ubuntu-latest
+    environment: prod
+    needs: qa
+    defaults:
+      run:
+        shell: bash
 
-        # Steps represent a sequence of tasks that will be executed as part of the job
-      steps:
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        - uses: actions/checkout@v3
+      # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
-        # Runs a single command using the runners shell
-        - name: Run a script
-          run: Running in prod enviroment
+      # Runs a single command using the runners shell
+      - name: Run a script
+        run: Running in prod enviroment
