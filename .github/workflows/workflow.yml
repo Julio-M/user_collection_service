@@ -20,21 +20,23 @@ jobs:
     defaults:
       run:
         shell: bash
-    # Label used to access the service container
-    postgres:
-      # Docker Hub image
-      image: postgres:14.5
-      # Provide the password for postgres
-      env:
-        POSTGRES_USER: juliomihali
-        POSTGRES_PASSWORD: juliomihali
-        POSTGRES_DB: usersdb
-      # Set health checks to wait until postgres has started
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
+        # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:14.5
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: juliomihali
+          POSTGRES_PASSWORD: juliomihali
+          POSTGRES_DB: usersdb
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
