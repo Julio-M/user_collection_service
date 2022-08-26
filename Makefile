@@ -21,6 +21,9 @@ test-health:
 test-func: guard-module
 	@ source setup.sh ; activateEnv $(module)
 
+postgres: 
+	docker run --name postgres14.5 -p 5432:5432 -e POSTGRES_USER=juliomihali -e POSTGRES_PASSWORD=juliomihali -d postgres:14.5-alpine
+
 format:
 	#format code
 	black services/
