@@ -16,7 +16,10 @@ ccso=$(shell tput smso)
 
 test-health:
 	# make test
-	@ source deploy.sh ; health
+	@ source setup.sh ; health
+
+test-func: guard-module
+	@ source setup.sh ; activateEnv $(module)
 
 format:
 	#format code
@@ -24,7 +27,7 @@ format:
 
 run: guard-module
 	# make run
-	@ source deploy.sh ; runLocally $(module)
+	@ source setup.sh ; runLocally $(module)
 
 deploy:
 	# make deploy
@@ -40,25 +43,25 @@ deploy-local:
 
 test: guard-module
 	# make test
-	@ . deploy.sh ; test $(module)
+	@ . setup.sh ; test $(module)
 
 cleanup:
-	# make cleanup
+	# make cleanup: guard-module
 	@ echo "$(ccso)--> Cleaning up all auxiliary files $(ccend)"
-	@ source deploy.sh ; cleanup
+	@ source setup.sh ; cleanup $(module)
 
-migrations: guard-module guard-name
+migrations: guard-name
 	# make migrations
 	@ echo "$(ccso)--> Creating migrations $(ccend)"
-	@ source deploy.sh ; makeMigrations $(module) ${name}
+	@ source setup.sh ; makeMigrations ${name}
 
 migrate:
 	# migrate
 	@ echo "$(ccso)--> Migrating $(ccend)"
-	@ source deploy.sh ; migrate
+	@ source setup.sh ; migrate
 
-setup-env:
+setup-env: guard-module 
 	# migrate
 	@ echo "$(ccso)--> setting up $(ccend)"
-	@ source deploy.sh ; setupEnvironment
+	@ source setup.sh ; activateEnv $(module)
 
