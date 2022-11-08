@@ -99,19 +99,31 @@ function cleanup(){
 }
 
 function makeMigrations() {
+      # Variables needed for executing apps locally
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
+    # export DB_URI="sqlite:///database.db"
+    export SECRET_KEY="secret"
+    export REFRESH_TOKEN="secret2"
+    export PYTHONPATH="$(pwd)/services/authentication"
     N=1
     if [ "$#" -ne ${N} ]; then
         echo "makeMigrations needs ${N} parameter(s)"
         exit 1
     fi
     cd ./services/
-    migrationName=$§
+    migrationName=$1
     echo "--> Making migrations <-----"
     alembic revision --autogenerate -m "${migrationName}"
     echo "--> Done <-----"
 }
 
 function migrate(){
+    # Variables needed for executing apps locally
+    export DB_URI="postgresql://$(whoami):$(whoami)@localhost:5432/usersdb?connect_timeout=10"
+    # export DB_URI="sqlite:///database.db"
+    export SECRET_KEY="secret"
+    export REFRESH_TOKEN="secret2"
+    export PYTHONPATH="$(pwd)/services/authentication"
     echo "--> Migrate <-----"
     cd ./services/
     alembic upgrade head

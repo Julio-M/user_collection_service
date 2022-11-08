@@ -20,6 +20,11 @@ make run module=authentication
 ```
 
 ### How to make migrations ?
+Note: If you get an error that versions folder does not exist- create an empty folder under services/alembic/
+Create a database named usersdb. Run the following command in postgersql.
+```postgres
+create database usersdb;
+```
 
 ```shell script
 make migrations name=<nameyourmigration>
